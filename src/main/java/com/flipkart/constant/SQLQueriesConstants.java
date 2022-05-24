@@ -1,22 +1,17 @@
-/**
- * 
- */
+
 package com.flipkart.constant;
 
-/**
- * @author ayushi
- *
- */
+
 public class SQLQueriesConstants {
 
 	public static final String DELETE_COURSE_QUERY = "delete from course where courseId = ?";
-	public static final String ADD_COURSE_QUERY = "insert into course(courseId, courseName, instructorId ,professorId,seats) values (?,?, ?, ?, ?)";
+	public static final String ADD_COURSE_QUERY = "insert into course(courseId, courseName, instructorId ,professorId, seats) values (?,?, ?, ?, ?)";
 	public static final String VIEW_PENDING_ADMISSION_QUERY = "select userId, name, password, phonenumber, address, studentId from student natural join user where isVerified = 0";
 	public static final String APPROVE_STUDENT_QUERY = "update student set isVerified = 1 where studentId = ?";
 	public static final String ADD_USER_QUERY = "insert into user(userId, name, password, role,phonenumber, address) values (?, ?, ?, ?, ?, ?)";
-	public static final String ADD_PROFESSOR_QUERY = "insert into professor(userIdf,professorId, department) values (?, ?, ?)";
+	public static final String ADD_PROFESSOR_QUERY = "insert into professor(userId,professorId, department) values (?, ?, ?)";
 	public static final String DELETE_PROFESSOR_QUERY = "delete from professor where professorId = ( ?)";
-	public static final String ASSIGN_COURSE_QUERY = "update course set professorId = ? where courseCode = ?";
+	public static final String ASSIGN_COURSE_QUERY = "update course set professorId = ? where courseId = ?";
 	public static final String VIEW_COURSE_QUERY = "select courseId, courseName, instructorId from course where courseId = ?";
 	
 	public static final String ADD_STUDENT="insert into student (userId,studentId,branch,isVerified) values (?,?,?,?)";
@@ -33,7 +28,7 @@ public class SQLQueriesConstants {
 	public static final String ADD_COURSE="insert into semesterregistration (studentId,courseId,semester,grade) values ( ?,?,?,? )";
 	public static final String DROP_COURSE_QUERY = "delete from semesterregistration where courseId = ? AND studentId = ? and semester = ?;";
 	public static final String INCREMENT_SEAT_QUERY  = "update course set seats = seats + 1 where courseId = ?;";
-	public static final String VIEW_GRADE = "select course.courseId,course.courseName,semesterregistration.grade from course inner join semesterregistration on course.courseCode = semesterregistration.courseCode where semesterregistration.studentId = ? and semesterregistration.semester = ?;";	
+	public static final String VIEW_GRADE = "select course.courseId,course.courseName,semesterregistration.grade from course inner join semesterregistration on course.courseId = semesterregistration.courseId where semesterregistration.studentId = ? and semesterregistration.semester = ?;";	
 	public static final String VIEW_REPORT_CARD = "select * from reportcard where studentId_report = ? and semester = ?;";	
 	public static final String GET_SEATS = "select seats from course where courseId = ?;";
 	public static final String INSERT_PAYMENT = "insert into payment(studentId_payment,paymentId,status,amount,notificationId,semester) values(?,?,?,?,?,?);";

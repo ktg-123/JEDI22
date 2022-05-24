@@ -26,10 +26,7 @@ import com.flipkart.exception.UserNotApprovedExecption;
 import com.flipkart.exception.UserNotFoundException;
 import com.flipkart.utils.DBUtils;
 
-/**
- * @author ayushi
- *
- */
+
 public class AdminDaoOperation implements AdminDaoInterface {
 
 	private static volatile AdminDaoOperation instance = null;
@@ -187,7 +184,7 @@ public class AdminDaoOperation implements AdminDaoInterface {
 			String sql = SQLQueriesConstants.ADD_PROFESSOR_QUERY;
 			statement = connection.prepareStatement(sql);
 
-			statement.setString(1, professor.getProfessorId());
+			statement.setString(1, professor.getUserId());
 			statement.setString(2, professor.getProfessorId());
 			statement.setString(3, professor.getDepartment());
 			int row = statement.executeUpdate();

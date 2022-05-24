@@ -16,10 +16,7 @@ import com.flipkart.exception.UserAlreadyExistException;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-/**
- * @author ayushi
- *
- */
+
 public interface AdminInterface {
 
 	/**

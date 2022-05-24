@@ -59,7 +59,13 @@ public class StudentRestAPI {
 	
 	private static Logger logger = Logger.getLogger(StudentRestAPI.class);
 	
+
+
 	/**
+	 * 
+	 * !!!!!!!!!       USELESSSS    !!!!!!!!!!!
+	 * 
+	 * 
 	 * Method to handle API request for course registration
 	 * @param courseList
 	 * @param studentId

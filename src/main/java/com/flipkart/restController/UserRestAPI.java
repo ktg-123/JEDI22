@@ -28,10 +28,7 @@ import com.flipkart.service.StudentOperation;
 import com.flipkart.service.UserInterface;
 import com.flipkart.service.UserOperation;
 
-/**
- * @author ayushi
- *
- */
+
 
 @Path("/user")
 public class UserRestAPI {

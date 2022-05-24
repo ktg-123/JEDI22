@@ -20,10 +20,7 @@ import com.flipkart.exception.UserNotFoundException;
 
 import java.util.HashMap;
 
-/**
- * @author ayushi
- *
- */
+
 public interface AdminDaoInterface {
 
 	/**

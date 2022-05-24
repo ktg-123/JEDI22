@@ -13,10 +13,7 @@ import com.flipkart.exception.GradeNotAddedException;
 import com.flipkart.exception.StudentNotFoundForVerificationException;
 import com.flipkart.exception.StudentNotRegisteredException;
 
-/**
- * @author ayushi
- *
- */
+
 public interface ProfessorInterface {
 
 	/**
