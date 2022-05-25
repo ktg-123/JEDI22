@@ -8,6 +8,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -33,11 +34,11 @@ public class ProfessorRestAPI {
 	}
 	
 	@GET
-	@Path("/getEnrolledStudents")
+	@Path("/{profId}/students")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<EnrolledStudent> viewEnrolledStudents(
 			@NotNull
-			@QueryParam("profId") String profId) 	{
+			@PathParam("profId") String profId) 	{
 		System.out.println(profId);
 		List<EnrolledStudent> students=new ArrayList<EnrolledStudent>();
 		try
@@ -54,11 +55,11 @@ public class ProfessorRestAPI {
 	}
 	
 	@GET
-	@Path("/getCourses")
+	@Path("/{profId}/courses")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Course> getCourses(
 			@NotNull
-			@QueryParam("profId") String profId) 	{
+			@PathParam("profId") String profId) 	{
 		
 		List<Course> courses=new ArrayList<Course>();
 		try
@@ -74,7 +75,7 @@ public class ProfessorRestAPI {
 	}
 	
 	@POST
-	@Path("/addGrade")
+	@Path("/{profId}/grade")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addGrade(
 			@NotNull
@@ -82,7 +83,7 @@ public class ProfessorRestAPI {
 			@NotNull
 			@QueryParam("courseCode") String courseId,
 			@NotNull
-			@QueryParam("profId") String profId,
+			@PathParam("profId") String profId,
 			@NotNull
 			@QueryParam("semester") int semester,
 			@NotNull
