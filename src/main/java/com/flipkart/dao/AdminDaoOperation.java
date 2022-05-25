@@ -140,6 +140,7 @@ public class AdminDaoOperation implements AdminDaoInterface {
 			statement = connection.prepareStatement(sql);
 
 			statement.setString(1, studentId);
+			System.out.println(studentId);
 			int row = statement.executeUpdate();
 
 			logger.info(row + " student approved.");
