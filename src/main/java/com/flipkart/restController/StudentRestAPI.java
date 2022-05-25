@@ -20,6 +20,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -158,13 +159,13 @@ public class StudentRestAPI {
 	 * @throws ValidationException
 	 */
 	@DELETE
-	@Path("/dropCourse")
+	@Path("/{studentId}/course/{courseCode}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response dropCourse(
 			@NotNull
-			@QueryParam("courseCode") String courseId,
+			@PathParam("courseCode") String courseId,
 			@NotNull
-			@QueryParam("studentId") String studentId,
+			@PathParam("studentId") String studentId,
 			@NotNull
 			@Min(value = 1, message = "Student ID should not be less than 1")
 			@Max(value = 20, message = "Student ID should be less than 20")
@@ -186,56 +187,35 @@ public class StudentRestAPI {
 	
 	
 	/**
-	 * Method handles API request to view the list of available courses for a student
+	 * Method handles API request to view the list of available courses or registered courses for a student
 	 * @param studentId
 	 * @return
 	 * @throws ValidationException
 	 */
 	@GET
-	@Path("/viewAvailableCourses")
+	@Path("/{studentId}/course")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Course> viewCourse(
 			@NotNull
-			@QueryParam("studentId") String studentId,
+			@PathParam("studentId") String studentId,
+			@QueryParam("viewRegistered") boolean viewRegistered,
 			@NotNull
 			@Min(value = 1, message = "Student ID should not be less than 1")
 			@Max(value = 20, message = "Student ID should be less than 20")
 			@QueryParam("semester") int semester) throws ValidationException{
-		
-		try {
-			return registrationInterface.viewCourses(studentId,semester);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	/**
-	 * Method handles API request to view the list of registered courses for a student
-	 * @param studentId
-	 * @return
-	 * @throws ValidationException
-	 */
-	@GET
-	@Path("/viewRegisteredCourses")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Course> viewRegisteredCourse(
-			@NotNull
-			@QueryParam("studentId") String studentId,
-			@NotNull
-			@Min(value = 1, message = "Student ID should not be less than 1")
-			@Max(value = 20, message = "Student ID should be less than 20")
-			@QueryParam("semester") int semester) throws ValidationException{
-		
-			try {
-				return registrationInterface.viewRegisteredCourses(studentId,semester);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				try {
+					if(viewRegistered) {
+						return registrationInterface.viewRegisteredCourses(studentId,semester);
+					} else {
+						return registrationInterface.viewCourses(studentId,semester);
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return null;
 			}
-			return null;
-	}
+	
 	
 	/**
 	 * Method handles API request to make payment for registered courses
@@ -310,11 +290,11 @@ public class StudentRestAPI {
 	 */
 	
 	@GET
-	@Path("/viewGradeCard")
+	@Path("/{studentId}/grade")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ReportCard viewGradeCard(
 			@NotNull
-			@QueryParam("studentId") String studentId,
+			@PathParam("studentId") String studentId,
 			@NotNull
 			@Min(value = 1, message = "Student ID should not be less than 1")
 			@Max(value = 9999, message = "Student ID should be less than 1000")
@@ -328,8 +308,7 @@ public class StudentRestAPI {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			return grade_card;
-		
+			return grade_card;		
 	}
 	
 }
