@@ -107,7 +107,7 @@ public class UserRestAPI {
 	 * @return 201, if user is created, else 500 in case of error
 	 */
 	@POST
-	@Path("/studentRegistration")
+	@Path("/student")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response registerStudent(@Valid Student student)
 	{

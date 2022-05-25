@@ -8,7 +8,6 @@ import io.dropwizard.setup.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.flipkart.restController.AdminRestAPI;
 import com.flipkart.restController.CourseRestAPI;
 import com.flipkart.restController.ProfessorRestAPI;
 import com.flipkart.restController.StudentRestAPI;
@@ -27,9 +26,7 @@ public class App extends Application<Configuration> {
         LOGGER.info("Registering REST resources");
        
         //registering all the RESTful service classes.
-        e.jersey().register(new AdminRestAPI());
-        e.jersey().register(new CourseRestAPI());
-        e.jersey().register(new AdminRestAPI());
+        e.jersey().register(new CourseRestAPI());        
         e.jersey().register(new ProfessorRestAPI());
         e.jersey().register(new StudentRestAPI());
         e.jersey().register(new UserRestAPI());

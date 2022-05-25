@@ -65,94 +65,6 @@ public class StudentRestAPI {
 
 	private static Logger logger = Logger.getLogger(StudentRestAPI.class);
 
-	/**
-	 * 
-	 * !!!!!!!!!       USELESSSS    !!!!!!!!!!!
-	 * 
-	 * 
-	 * Method to handle API request for course registration
-	 * @param courseList
-	 * @param studentId
-	 * @throws ValidationException
-	 * @return
-	 */
-	
-	@POST
-	@Path("/registerCourses")
-	@Consumes("application/json")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response registerCourses(List<String> courseList, 
-			@NotNull
-			@QueryParam("studentId") String studentId,
-			@NotNull
-			@Min(value = 1, message = "Student ID should not be less than 1")
-			@Max(value = 20, message = "Student ID should be less than 20")
-			@QueryParam("semester") int semester)	throws ValidationException{
-						
-		try
-		{
-			List<Course> availableCourseList = registrationInterface.viewCourses(studentId,1);
-			Set<String> hash_set = new HashSet<String>();
-			
-			for(String courseCode:courseList) {
-				
-					if(!hash_set.add(courseCode))
-						return Response.status(500).entity("Duplicate value  : "+courseCode).build();
-			}
-
-			for(String courseCode:courseList)
-				registrationInterface.addCourse(courseCode, studentId,semester);
-		}
-		catch (AddCourseException | CourseNotFoundException | CourseLimitReachedException | SQLException e) {
-			System.out.println(e.getMessage());
-			return Response.status(500).entity(e.getMessage()).build();
-		}			
-		
-		return Response.status(201).entity( "Registration Successful").build();
-		
-}
-	
-
-
-	/**
-	 * Handles api request to add a course
-	 * @param courseCode
-	 * @param studentId
-	 * @return
-	 * @throws ValidationException
-	 */
-	@PUT
-	@Path("/addCourse")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response addCourse(
-			@NotNull
-			@QueryParam("courseCode") String courseId,
-			@NotNull
-			@QueryParam("studentId") String studentId,
-			@NotNull
-			@Min(value = 1, message = "Student ID should not be less than 1")
-			@Max(value = 20, message = "Student ID should be less than 20")
-			@QueryParam("semester") int semester) throws ValidationException{
-	
-		try{
-			
-			List<Course> availCourseList = registrationInterface.viewCourses(studentId,semester);
-				if(registrationInterface.addCourse(courseId, studentId,semester)) {
-					return Response.status(201).entity( "You have successfully added Course : " + courseId).build();
-				}
-				return Response.status(501).entity( "Course with Course ID : " + courseId+" already exists.").build();
-
-			
-			
-		}
-		catch (AddCourseException | CourseNotFoundException | CourseLimitReachedException | SQLException e) {
-			System.out.println(e.getMessage());
-			return Response.status(500).entity(e.getMessage()).build();
-
-		}
-
-	}
-
 		/**
 	 * /admin/genReport
 	 * REST- for generating report card
@@ -183,6 +95,50 @@ public class StudentRestAPI {
 		}		
 	}
 	
+/**
+	 * Handles api request to add a course
+	 * @param courseCode
+	 * @param studentId
+	 * @return
+	 * @throws ValidationException
+	 */
+	@PUT
+	@Path("/{studentId}/course/{courseCode}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addCourse(
+			@NotNull
+			@PathParam("courseCode") String courseId,
+			@NotNull
+			@PathParam("studentId") String studentId,
+			@NotNull
+			@Min(value = 1, message = "Student ID should not be less than 1")
+			@Max(value = 20, message = "Student ID should be less than 20")
+			@QueryParam("semester") int semester) throws ValidationException{
+	
+		try{
+			
+			List<Course> availCourseList = registrationInterface.viewCourses(studentId,semester);
+				if(registrationInterface.addCourse(courseId, studentId,semester)) {
+					return Response.status(201).entity( "You have successfully added Course : " + courseId).build();
+				}
+				return Response.status(501).entity( "Course with Course ID : " + courseId+" already exists.").build();
+
+			
+			
+		}
+		catch (AddCourseException | CourseNotFoundException | CourseLimitReachedException | SQLException e) {
+			System.out.println(e.getMessage());
+			return Response.status(500).entity(e.getMessage()).build();
+
+		}
+
+	}
+
+	
+	/**
+	 * /admin/reportGenerate
+	 * REST-service for generating report
+	 */
 	@POST
 	@Path("/{studentId}/report")
 	@Consumes("application/json")
@@ -266,72 +222,6 @@ public class StudentRestAPI {
 				}
 				return null;
 			}
-	
-	
-	/**
-	 * Method handles API request to make payment for registered courses
-	 * @param studentId
-	 * @param paymentMode
-	 * @return
-	 * @throws ValidationException
-	 */
-	
-	//paymentId,studentId,amount,status,notificationId,semester
-	@POST
-	@Path("/make_payment")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response make_payment(
-			@NotNull
-			@QueryParam("studentId") String studentId , 
-			@NotNull
-			@Min(value = 1, message = "semester should not be less than 1")
-			@Max(value = 20, message = "semester should be less than 20")
-			@QueryParam("semester") int semester) throws ValidationException{
-		
-			List<Course> course_registered = null;
-			try {
-				course_registered = registrationInterface.viewRegisteredCourses(studentId, semester);
-				if (course_registered.isEmpty()) {
-					return Response.status(201).entity( "You haven't registered for any course").build();
-				}
-			} catch (SQLException e) {
-	
-				logger.info(e.getMessage());
-				return Response.status(501).entity(e.getMessage()).build();
-				
-			}
-			String notificationId;
-			int fee= 0;
-			try {
-			Payment viewPayment = registrationInterface.viewFee(studentId, semester);
-			
-			if(viewPayment != null) {
-				return Response.status(201).entity( "You have already completed the payment.").build();
-			}
-			fee = course_registered.size() * 1000;
-
-			logger.info("Your total fee  = " + fee);
-			String paymentId = studentId + Integer.toString(semester) + Integer.toString(fee);
-			StringBuilder in = new StringBuilder();
-			in.append(paymentId);
-			in.reverse();
-			notificationId = in.toString() ;
-			String status = "success";
-			Payment payment = new Payment(paymentId,studentId,fee,status,notificationId,semester);
-			
-				registrationInterface.payFee(payment);
-			} catch( PaymentNotFoundException |SQLException ex) {
-				logger.error(ex.getMessage());
-				return Response.status(201).entity( "You have already completed the payment.").build();
-			}
-
-			
-			logger.info("Your Payment is successful");
-			logger.info("Your transaction id : " + notificationId);
-			
-			return Response.status(501).entity("Your total fee  = " + fee+"\n"+"Your Payment is successful\n"+"Your transaction id : " + notificationId).build();
-		
-	}
 	
 	/**
 	 * Method handles request to display the grade card for student
