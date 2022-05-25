@@ -40,11 +40,11 @@ public class Student extends User {
 	 * Getter Setter Methods for Student details
 	 *
 	 */
-	public String getRollNumber() {
+	public String getStudentId() {
 		return studentId;
 	}
 
-	public void setRollNumber(String rollNumber) {
+	public void setStudentId(String rollNumber) {
 		this.studentId = rollNumber;
 	}
 

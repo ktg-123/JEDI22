@@ -116,7 +116,7 @@ public class UserRestAPI {
 		{
 			StudentOperation studentOperation = new StudentOperation();
 			String res = studentOperation.registerStudent(student.getUserName(), student.getPhoneNumber(), student.getAddress(), student.getUserId(), student.getUserPassword(), String.valueOf(STUDENT),
-					student.getRollNumber(), student.getBranch(), false);
+					student.getStudentId(), student.getBranch(), false);
 			
 			if(res.equalsIgnoreCase("")) {
 				return Response.status(500).entity("User with userId " + student.getUserId() + " already exists.").build(); 

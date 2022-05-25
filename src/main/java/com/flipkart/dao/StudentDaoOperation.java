@@ -79,7 +79,7 @@ public class StudentDaoOperation implements StudentDaoInterface {
 				PreparedStatement preparedStatementStudent;
 				preparedStatementStudent=connection.prepareStatement(SQLQueriesConstants.ADD_STUDENT,Statement.RETURN_GENERATED_KEYS);
 				preparedStatementStudent.setString(1,student.getUserId().toString());
-				preparedStatementStudent.setString(2,student.getUserId().toString());
+				preparedStatementStudent.setString(2,student.getStudentId().toString());
 				preparedStatementStudent.setString(3, student.getBranch().toString());
 				preparedStatementStudent.setBoolean(4, false);
 				preparedStatementStudent.executeUpdate();
