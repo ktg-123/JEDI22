@@ -30,6 +30,8 @@ import org.apache.log4j.Logger;
 import java.sql.SQLException;
 import java.util.*;
 
+import com.flipkart.service.AdminInterface;
+import com.flipkart.service.AdminOperation;
 import com.flipkart.service.ProfessorInterface;
 import com.flipkart.service.ProfessorOperation;
 import org.apache.log4j.Logger;
@@ -43,6 +45,8 @@ import com.flipkart.exception.CourseNotDeletedException;
 import com.flipkart.exception.CourseNotFoundException;
 import com.flipkart.exception.PaymentNotFoundException;
 import com.flipkart.exception.SeatNotAvailableException;
+import com.flipkart.exception.StudentNotFoundForVerificationException;
+import com.flipkart.exception.StudentNotRegisteredException;
 import com.flipkart.service.RegistrationInterface;
 import com.flipkart.service.RegistrationOperation;
 
@@ -57,10 +61,9 @@ public class StudentRestAPI {
 	
 	RegistrationInterface registrationInterface = RegistrationOperation.getInstance();
 	ProfessorInterface professorInterface = ProfessorOperation.getInstance();
-	
-	private static Logger logger = Logger.getLogger(StudentRestAPI.class);
-	
+	AdminInterface adminOperation = AdminOperation.getInstance();
 
+	private static Logger logger = Logger.getLogger(StudentRestAPI.class);
 
 	/**
 	 * 
@@ -150,7 +153,55 @@ public class StudentRestAPI {
 
 	}
 
+		/**
+	 * /admin/genReport
+	 * REST- for generating report card
+	 * @param studentId 
+	 * @param student Semester
+	 * @return
+	 */
+
+
+	/**
+	 * /admin/approveStudent
+	 * REST-service for approving the student admission
+	 * @param studentId
+	 * @return
+	 */
+	@PUT
+	@Path("/{studentId}/approve")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response approveStudent(
+			@NotNull
+			@PathParam("studentId") String studentId) throws ValidationException{
+		try {
+			adminOperation.approveStudent(studentId);
+			return Response.status(204).entity("Student with studentId: " + studentId + " approved").build();
 	
+		} catch (StudentNotFoundForVerificationException e) {
+			return Response.status(409).entity(e.getMessage()).build();
+		}		
+	}
+	
+	@POST
+	@Path("/{studentId}/report")
+	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response generateReport(
+			@NotNull
+			@PathParam("studentId") String studentId,
+			
+			@NotNull
+			@QueryParam("semester") int studentSem) throws ValidationException{
+		
+		try {
+			adminOperation.generateReport(studentId,studentSem);
+			return Response.status(201).entity("Generated Report Card for studentId: " + studentId ).build();
+		} catch (StudentNotRegisteredException e) {
+			return Response.status(409).entity(e.getMessage()).build();
+		}
+						
+	}
 	/**
 	 * Handles API request to drop a course
 	 * @param courseCode

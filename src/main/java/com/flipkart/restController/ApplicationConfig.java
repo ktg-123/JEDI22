@@ -21,6 +21,7 @@ public class ApplicationConfig extends ResourceConfig {
 		register(ProfessorRestAPI.class);
 		register(AdminRestAPI.class);
 		register(UserRestAPI.class);
+		register(CourseRestAPI.class);
 	}
 	
 

@@ -3,8 +3,11 @@ package com.flipkart.restController;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.ValidationException;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -18,19 +21,69 @@ import org.hibernate.validator.constraints.Email;
 
 import com.flipkart.bean.Course;
 import com.flipkart.bean.EnrolledStudent;
+import com.flipkart.bean.Professor;
+import com.flipkart.exception.ProfessorNotAddedException;
+import com.flipkart.exception.ProfessorNotDeletedException;
+import com.flipkart.exception.UserAlreadyExistException;
+import com.flipkart.service.AdminInterface;
+import com.flipkart.service.AdminOperation;
 import com.flipkart.service.ProfessorInterface;
 import com.flipkart.service.ProfessorOperation;
 import com.flipkart.validator.ProfessorValidator;
 
+
 @Path("/professor")
 public class ProfessorRestAPI {
 	ProfessorInterface professorInterface=ProfessorOperation.getInstance();
-	
+	AdminInterface adminOperation = AdminOperation.getInstance();
+
 	@GET
 	@Path("/testhello")
 	@Produces("text/plain")
 	public String test() {
 		return "Hellooooo";
+	}
+	
+		/**
+	 * /admin/deleteProfessor
+	 * REST-services for removing a professor from database
+	 * @param courseCode
+	 * @return
+	 */
+	@DELETE
+	@Path("/{professorId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response removeProfessor(
+			@NotNull
+			@PathParam("professorId") String professorId) throws ValidationException{
+		
+		try {
+			adminOperation.removeProfessor(professorId);
+			return Response.status(204).entity("Professor with professorId: " + professorId + " deleted from database").build();
+		} catch (ProfessorNotAddedException | ProfessorNotDeletedException e) {
+			return Response.status(204).entity("Professor with professorId: " + professorId + " deleted from database").build();
+			//return Response.status(409).entity(e.getMessage()).build();
+		}
+
+	}
+
+	@POST
+	@Path("/")
+	@Consumes("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addProfessor(@Valid Professor professor) throws ValidationException{
+		 
+		try {
+			System.out.println(professor.toString());
+			if(adminOperation.addProfessor(professor)) {
+			
+			return Response.status(201).entity("Professor with professorId: " + professor.getUserId() + " added").build();
+			}
+			return Response.status(501).entity("Professor with professorId: " + professor.getUserId() + " already exists.").build();
+
+		} catch (ProfessorNotAddedException | UserAlreadyExistException e) {
+			return Response.status(409).entity(e.getMessage()).build();
+		}				
 	}
 	
 	@GET
