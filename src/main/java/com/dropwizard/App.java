@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.flipkart.restController.CourseRestAPI;
+import com.flipkart.restController.EndRegistrationRestAPI;
 import com.flipkart.restController.ProfessorRestAPI;
 import com.flipkart.restController.StudentRestAPI;
 import com.flipkart.restController.UserRestAPI;
@@ -27,6 +28,7 @@ public class App extends Application<Configuration> {
        
         //registering all the RESTful service classes.
         e.jersey().register(new CourseRestAPI());        
+        e.jersey().register(new EndRegistrationRestAPI() );        
         e.jersey().register(new ProfessorRestAPI());
         e.jersey().register(new StudentRestAPI());
         e.jersey().register(new UserRestAPI());

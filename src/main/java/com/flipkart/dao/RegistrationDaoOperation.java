@@ -127,6 +127,30 @@ public class RegistrationDaoOperation implements RegistrationDaoInterface {
 		return false;
 	}
 
+
+	
+	public boolean checkCourse(String courseId, String studentId, int semester) throws SQLException {
+
+		Connection conn = DBUtils.getConnection();
+
+		try {
+			System.out.println("hi");
+			stmt = conn.prepareStatement(SQLQueriesConstants.VIEW_COURSE_AVAILABILITY);
+			stmt.setString(1, studentId);
+			stmt.setInt(2, semester);
+			stmt.setString(3, courseId);
+			ResultSet rs=  stmt.executeQuery();
+			if(rs.next() == false){
+				System.out.println("ResultSet in empty in available course");
+				return false;
+			}
+			else return true;
+		} catch (SQLException e) {
+			logger.error("");
+		} 
+		return false;
+	}
+
 	/**
 	 * Method checks if the student is registered for that course
 	 * @param courseCode code of the course

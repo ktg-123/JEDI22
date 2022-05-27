@@ -22,7 +22,7 @@ public interface RegistrationInterface {
 	 * @throws  
 	 */
 	public boolean addCourse(String courseId, String studentId, int semester) throws CourseNotFoundException,AddCourseException, CourseLimitReachedException, SQLException;
-
+	public boolean checkCourse(String courseId, String studentId, int semester) throws  CourseNotFoundException,AddCourseException, CourseLimitReachedException, SQLException;
 	/**
 	 *
 	 * @param courseId

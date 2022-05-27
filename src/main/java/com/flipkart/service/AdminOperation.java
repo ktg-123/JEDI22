@@ -3,6 +3,7 @@
  */
 package com.flipkart.service;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import org.apache.log4j.Logger;
@@ -185,5 +186,11 @@ public class AdminOperation implements AdminInterface {
 			logger.error(e.getMessage());
 		}
 	}
+
+	@Override
+	 public int endRegistration(int semester) {
+		return adminDaoOperation.endRegistration(semester);
+	}
+
 
 }

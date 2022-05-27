@@ -87,4 +87,8 @@ public interface AdminDaoInterface {
 	 */
 	public HashMap<String, String> fetchGrades(String StudentId, int semester);
 
+	public int endRegistration(int semester);
+
+
+
 }

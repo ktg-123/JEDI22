@@ -328,4 +328,20 @@ public class AdminDaoOperation implements AdminDaoInterface {
 		return null;
 	}
 
+
+	public int endRegistration(int semester) {
+		statement = null;
+		try {
+			String sql = SQLQueriesConstants.END_REGISTRATION;
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, semester);
+			int rows = statement.executeUpdate();
+			System.out.println("hey rows affected for cancelling courses are: " + rows);
+			return rows;
+		} catch (SQLException e) {
+			logger.error(e.getMessage());
+		}
+		return 0;
+	}
+
 }

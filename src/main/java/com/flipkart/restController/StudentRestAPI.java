@@ -38,6 +38,7 @@ import org.apache.log4j.Logger;
 import com.flipkart.bean.Course;
 import com.flipkart.bean.Payment;
 import com.flipkart.bean.ReportCard;
+import com.flipkart.dao.RegistrationDaoOperation;
 import com.flipkart.exception.AddCourseException;
 import com.flipkart.exception.CourseAlreadyRegisteredException;
 import com.flipkart.exception.CourseLimitReachedException;
@@ -117,11 +118,19 @@ public class StudentRestAPI {
 	
 		try{
 			
-			List<Course> availCourseList = registrationInterface.viewCourses(studentId,semester);
-				if(registrationInterface.addCourse(courseId, studentId,semester)) {
-					return Response.status(201).entity( "You have successfully added Course : " + courseId).build();
+			    List<Course> availCourseList = registrationInterface.viewCourses(studentId,semester);
+			    boolean availabile = registrationInterface.checkCourse(courseId,studentId,semester);
+				System.out.println(availabile);
+				if(availabile){
+					if(registrationInterface.addCourse(courseId, studentId,semester)) {
+						return Response.status(201).entity( "You have successfully added Course : " + courseId).build();
+					}
+					return Response.status(501).entity( "Course with Course ID : " + courseId+" already exists.").build();
+
 				}
-				return Response.status(501).entity( "Course with Course ID : " + courseId+" already exists.").build();
+				else {
+					return Response.status(201).entity( "SEATS ARE FULL!!").build();
+				}
 
 			
 			

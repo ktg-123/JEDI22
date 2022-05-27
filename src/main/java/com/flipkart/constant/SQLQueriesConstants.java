@@ -24,6 +24,7 @@ public class SQLQueriesConstants {
 	// Student Queries
 	public static final String VIEW_REGISTERED_COURSES=" select * from course inner join semesterregistration on course.courseId = semesterregistration.courseId where semesterregistration.studentId = ? and semesterregistration.semester = ?";
 	public static final String VIEW_AVAILABLE_COURSES=" select * from course where courseId not in  (select courseId  from semesterregistration where studentId = ? and semester = ?) and seats > 0";
+	public static final String VIEW_COURSE_AVAILABILITY=" select * from course where courseId not in  (select courseId  from semesterregistration where studentId = ? and semester = ?) and seats > 0 and courseId=?";
 	public static final String DECREMENT_COURSE_SEATS="update course set seats = seats-1 where courseId = ? ";
 	public static final String ADD_COURSE="insert into semesterregistration (studentId,courseId,semester,grade) values ( ?,?,?,? )";
 	public static final String DROP_COURSE_QUERY = "delete from semesterregistration where courseId = ? AND studentId = ? and semester = ?;";
@@ -31,10 +32,7 @@ public class SQLQueriesConstants {
 	public static final String VIEW_GRADE = "select course.courseId,course.courseName,semesterregistration.grade from course inner join semesterregistration on course.courseId = semesterregistration.courseId where semesterregistration.studentId = ? and semesterregistration.semester = ?;";	
 	public static final String VIEW_REPORT_CARD = "select * from reportcard where studentId_report = ? and semester = ?;";	
 	public static final String GET_SEATS = "select seats from course where courseId = ?;";
-	public static final String INSERT_PAYMENT = "insert into payment(studentId_payment,paymentId,status,amount,notificationId,semester) values(?,?,?,?,?,?);";
-	public static final String VIEW_PAYMENT = "select * from  payment where studentId_payment = ? and semester = ?;";
 
-	public static final String GET_NOTIFICATION = "select * from payment where studentId_payment = ?;";
 	public static final String ADD_GRADE="update semesterregistration set grade=? where courseId=? and studentId=? and semester = ?";
 	public static final String GET_COURSES="select * from course where instructorId=?";
 	public static final String GET_REGISTRATION_STATUS=" select isRegistered from student where studentId = ? ";
@@ -45,6 +43,11 @@ public class SQLQueriesConstants {
 	public static final String FETCH_GRADES=" select grade , courseId from semesterregistration where studentId=? and semester = ?";
 	public static final String DELETE_USER_QUERY = "delete from user where userId = ( ?)";
 
+	//end registration from admin
+	
+	public static final String END_REGISTRATION = "update course inner join semesterregistration on course.courseId = semesterregistration.courseId set course.isCancelled=1 where course.seats>7 and semesterregistration.semester = ?";
+
+
 	/*
 	Name of Tables:
 	1. course
@@ -52,8 +55,7 @@ public class SQLQueriesConstants {
 	3. student
 	4. professor
 	5. semesterregistration
-	6. payment
-	7. reportcard
+	6. reportcard
 	
 	*/
 }

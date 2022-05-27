@@ -32,6 +32,8 @@ public interface RegistrationDaoInterface {
 	 */
 	public boolean addCourse(String courseId, String studentId, int semester) throws  SQLException;
 
+	public boolean checkCourse(String courseId, String studentId, int semester) throws  SQLException;
+
 	/**
 	 * Drop Course selected by student
 	 * 
@@ -51,6 +53,7 @@ public interface RegistrationDaoInterface {
 	 * @throws SQLException
 	 */
 	public List<Course> viewCourses(String studentId, int semester) throws SQLException;
+	
 
 	/**
 	 * Method to View list of Registered Courses

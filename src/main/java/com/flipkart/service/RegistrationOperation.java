@@ -84,6 +84,13 @@ public class RegistrationOperation implements RegistrationInterface {
 	}
 
 
+	@Override
+	public boolean checkCourse(String courseId, String studentId, int semester) throws CourseNotFoundException,AddCourseException, CourseLimitReachedException, SQLException {
+	 return registrationDaoInterface.checkCourse(courseId, studentId, semester);
+	}
+
+
+
 	/**
 	 *  Method to drop Course selected by student
 	 *
